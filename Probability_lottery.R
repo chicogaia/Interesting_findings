@@ -42,8 +42,14 @@ win.lottery <- function(max.life, gamble.life , week.freq , prob.lottery) {
         #Plot the data
         ggplot(probwin.data, aes(x = life.time, y = p*100)) +
         geom_line() +
-        labs(title = "The Reality we live in is a function of Probabilities",
-             x = "Length of a Life Time (years) | log scale", y = "Probability of winning the lottery at least once (%)") +
+        labs(
+          title = "The Reality we live in is a function of Probabilities",
+             x = "Length of a Life Time (years) | log scale", y = "Probability of winning the lottery at least once (%)",
+             caption = paste(
+               "You have",
+               round(p[gamble.life]*100,2) ,
+               "% chance of winning the lottery at least once in your life-time")
+          ) +
         geom_vline(xintercept = gamble.life, linetype = "dashed") +
         geom_hline(yintercept = p[gamble.life]*100, linetype = "dashed") +
         coord_cartesian(ylim = c(0,max(probwin.data$p*100))) +
