@@ -5,7 +5,7 @@
 #amount of years of gambling
 
 #Establish the max life.time you will want to plot
-max.life <- 1000
+max.life <- 100
 
 #Establish for how many years you will gamble
 gamble.life <- 100-18
@@ -18,7 +18,7 @@ week.freq <- 2
 
 #Function that calculates and plots the probability of winning the specified lottery at least once in a 
 #life-time, for each life-time periods until the max defined in "life" argument
-win.lottery <- function(max.life, gamble.life , week.freq , prob.lottery) {
+win.lottery <- function(gamble.life , max.life = 100, week.freq = 2 , prob.lottery = 1/choose(60,6)) {
         
         #Generate vector with all life-times to be plotted  
         life.time <- c(1:max.life)
