@@ -18,7 +18,7 @@ week.freq <- 2
 
 #Function that calculates and plots the probability of winning the specified lottery at least once in a 
 #life-time, for each life-time periods until the max defined in "life" argument
-win.lottery <- function(gamble.life , max.life = 100, week.freq = 2 , prob.lottery = 1/choose(60,6)) {
+win.lottery <- function(gamble.life , max.life = 10000, week.freq = 2 , prob.lottery = 1/choose(60,6)) {
         
         #Generate vector with all life-times to be plotted  
         life.time <- c(1:max.life)
@@ -34,7 +34,7 @@ win.lottery <- function(gamble.life , max.life = 100, week.freq = 2 , prob.lotte
         
         #Generate df with 2 columns: life-time periods and probability of winning the specified lottery
         #at least once in each life-time period
-        probwin.data <- data.frame(life.time , p)
+        probwin.data <- data.table(life.time , p)
         
         #Load plot library
         library(ggplot2)
@@ -52,7 +52,6 @@ win.lottery <- function(gamble.life , max.life = 100, week.freq = 2 , prob.lotte
           ) +
         geom_vline(xintercept = gamble.life, linetype = "dashed") +
         geom_hline(yintercept = p[gamble.life]*100, linetype = "dashed") +
-        coord_cartesian(ylim = c(0,max(probwin.data$p*100))) +
         scale_x_log10()
 }
 

@@ -18,12 +18,12 @@ week.freq <- 2
 
 #Function that calculates and plots the probability of winning the specified lottery at least once in a 
 #life-time, for each life-time periods until the max defined in "life" argument
-win.lottery <- function(gamble.life , max.life = 100, week.freq = 2 , prob.lottery = 1/choose(60,6)) {
+win.lotto <- function(gamble.life , max.life = 100, week.freq = 2 , prob.lottery = 1/choose(60,6)) {
         
         #Generate vector with all life-times to be plotted  
         life.time <- c(1:max.life)
         
-        #Generate empty vecto "p" inside which the probabilities of winning at least once will be stored
+        #Generate empty vector "p" inside which the probabilities of winning at least once will be stored
         #for each life-time period of gambling
         p <- c()
         
@@ -43,12 +43,13 @@ win.lottery <- function(gamble.life , max.life = 100, week.freq = 2 , prob.lotte
         ggplot(probwin.data, aes(x = life.time, y = p*100)) +
         geom_line() +
         labs(
-          title = "The Reality we live in is a function of Probabilities",
-             x = "Length of a Life Time (years) | log scale", y = "Probability of winning the lottery at least once (%)",
+          title = "A Realidade que vivemos é uma função de Probabilidades",
+             x = "Duração total de uma vida (anos) | escala log",
+             y = "Probabilidade de ganhar na loteria pelo menos uma vez (%)",
              caption = paste(
-               "You have",
+               "Você tem",
                round(p[gamble.life]*100,2) ,
-               "% chance of winning the lottery at least once in your life-time  |  A R simulation by Francisco Gaia")
+               "% chance de ganhar na loteria pelo menos uma vez na vida.  |  Simulação em R por Francisco Gaia")
           ) +
         geom_vline(xintercept = gamble.life, linetype = "dashed") +
         geom_hline(yintercept = p[gamble.life]*100, linetype = "dashed") +
@@ -59,4 +60,38 @@ win.lottery <- function(gamble.life , max.life = 100, week.freq = 2 , prob.lotte
 #The idea is that the reality we experience as human beings is a function of probability of events occuring
 #Live a regular <100 years life, and you will probably never win the lottery
 #Live enough (>1M years), and you will most likely win the lottery at least once in that life-time
+
+win.lotto.big <- function(gamble.life = 10001 , max.life = 1000000, week.freq = 2 , prob.lottery = 1/choose(60,6)) {
+        by <- 100
+        life.time <- seq(from = 1 , to = max.life , by = by)
+        p <- c()
+        for (i in life.time) {
+                p <- rbind(p , sum(dbinom(1:(i*week.freq*52), i*week.freq*52, prob.lottery)))
+        }
+        probwin.data <- data.frame(life.time , p)
+
+        library(ggplot2)
+
+        ggplot(probwin.data, aes(x = life.time, y = p*100)) +
+                geom_line() +
+                labs(
+                        title = "A Realidade que vivemos é uma função de Probabilidades",
+                        x = "Duração total de uma vida (anos) | escala log",
+                        y = "Probabilidade de ganhar na loteria pelo menos uma vez (%)",
+                        caption = paste(
+                                "Você tem",
+                                round(p[(gamble.life-1)/by+1]*100,2) ,
+                                "% chance de ganhar na loteria pelo menos uma vez na vida, vivendo",
+                                gamble.life-1,
+                                "anos. |  Simulação em R por Francisco Gaia")
+                ) +
+                geom_vline(xintercept = gamble.life, linetype = "dashed") +
+                geom_hline(yintercept = p[(gamble.life-1)/by+1]*100, linetype = "dashed") +
+                coord_cartesian(ylim = c(0,max(probwin.data$p*100))) +
+                coord_cartesian(xlim = c(1,max.life+by)) +
+                scale_x_log10()
+}
+
+#JÁ TÁ PRONTO - SÓ BOTA PRA RODAR ANTES DE DORMIR!
+
 
