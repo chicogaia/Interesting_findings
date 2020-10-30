@@ -1,6 +1,4 @@
 
-
-
 coin.un_fair <- function(sample.size = 100 , samples.n = 10000 , prob_unfair = c(0.8, 0.2)) {
   
   #Generate vector for possible outcomes
@@ -38,16 +36,18 @@ coin.un_fair <- function(sample.size = 100 , samples.n = 10000 , prob_unfair = c
   #Plot the number of heads outcome by frequency 
   p.fair <- hist(heads.fair, breaks = 15)
   p.unfair <- hist(heads.unfair, breaks = 15)
-  plot(p.fair, col=rgb(0,0,1,1/3), xlim = c(30,100), ylim = c(0,2000), 
+  plot(p.fair, col=rgb(0,0,1,1/3), xlim = c(20,100), ylim = c(0,2000), 
        main = paste("Distribuição de ", samples.n, "amostras de ", sample.size , " jogadas de moeda"),
   xlab = "Número de vezes que caiu em 'Cara' ",
   ylab = "Número de amostras")
-  plot(p.unfair, col=rgb(1,0,0,1/3), xlim = c(30,100), ylim = c(0,2000), add = T)
+  plot(p.unfair, col=rgb(1,0,0,1/3), xlim = c(20,100), ylim = c(0,2000), add = T)
   legend("topleft" ,
          col = c(rgb(0,0,1,1/3) , rgb(1,0,0,1/3)),
          legend = c("Moeda Justa", paste("Moeda Injusta | p=" , prob_unfair[1])),
          pch = 15,
-         bty = "n")
+         bty = "n",
+         cex = 1.25,
+         pt.cex = 2.5)
   
   dev.off()
        
