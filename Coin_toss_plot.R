@@ -1,28 +1,55 @@
 
 
 
-coin.toss.plot <- function(sample.size = 100 , samples.n = 10000 , prob = c(0.5, 0.5)) {
+coin.un_fair <- function(sample.size = 100 , samples.n = 10000 , prob_unfair = c(0.8, 0.2)) {
   
   #Generate vector for possible outcomes
   coin <- c("heads", "tails")
   
+  
+  #FAIR
+  
   #Generate vector to store outcome = heads of the sample.size number of tosses
-  heads <- c()
+  heads.fair <- c()
   
   #Generate samples.n number of sample.size tosses and stores the number of heads outcome
   for (i in 1:samples.n) {
-    coin.toss <- sample(coin, sample.size, replace = TRUE, prob)
-    heads[i] <- sum(coin.toss == "heads")
+    coin.toss <- sample(coin, sample.size, replace = TRUE, c(0.5,0.5))
+    heads.fair[i] <- sum(coin.toss == "heads")
   }
+  
+  
+  #UNFAIR
+  
+  #Generate vector to store outcome = heads of the sample.size number of tosses
+  heads.unfair <- c()
+  
+  #Generate samples.n number of sample.size tosses and stores the number of heads outcome
+  for (i in 1:samples.n) {
+    coin.toss <- sample(coin, sample.size, replace = TRUE, prob_unfair)
+    heads.unfair[i] <- sum(coin.toss == "heads")
+  }
+  
+  #Generate .jpg file
+  setwd("C:/Users/Francisco Gaia/Documents/interesting_findings/LinkedIn Articles/Coin Toss pvalue")
+  jpeg("cointoss.jpeg", height = 600 , width = 800)
+
  
   #Plot the number of heads outcome by frequency 
-  hist(heads, breaks = 15,
+  p.fair <- hist(heads.fair, breaks = 15)
+  p.unfair <- hist(heads.unfair, breaks = 15)
+  plot(p.fair, col=rgb(0,0,1,1/3), xlim = c(30,100), ylim = c(0,2000), 
        main = paste("Distribuição de ", samples.n, "amostras de ", sample.size , " jogadas de moeda"),
-       xlab = "Número de vezes que caiu em 'Cara' ",
-       ylab = "Número de amostras")
+  xlab = "Número de vezes que caiu em 'Cara' ",
+  ylab = "Número de amostras")
+  plot(p.unfair, col=rgb(1,0,0,1/3), xlim = c(30,100), ylim = c(0,2000), add = T)
+  legend("topleft" ,
+         col = c(rgb(0,0,1,1/3) , rgb(1,0,0,1/3)),
+         legend = c("Moeda Justa", paste("Moeda Injusta | p=" , prob_unfair[1])),
+         pch = 15,
+         bty = "n")
   
-}
-
-pnorm(800 , mean = mean(heads), sd = sd(heads), lower.tail = FALSE)
-
+  dev.off()
+       
+}   
 
